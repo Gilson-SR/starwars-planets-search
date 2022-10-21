@@ -2,7 +2,10 @@ import React, { useContext } from 'react';
 import myContext from '../context/myContext';
 
 function Table() {
-  const { dataAPI } = useContext(myContext);
+  const { dataAPI, planet } = useContext(myContext);
+
+  const filterPlanet = (element) => element.name.toUpperCase()
+    .includes(planet.toUpperCase());
 
   return (
     <table>
@@ -25,7 +28,7 @@ function Table() {
       </thead>
       <tbody>
         {
-          dataAPI?.map((element) => (
+          dataAPI?.filter(filterPlanet).map((element) => (
             <tr key={ element.name }>
               <td>{ element.name }</td>
               <td>{ element.rotation_period }</td>

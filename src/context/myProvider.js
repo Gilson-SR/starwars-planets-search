@@ -4,6 +4,7 @@ import MyContext from './myContext';
 
 function Provider({ children }) {
   const [dataAPI, setDataAPI] = useState([]);
+  const [planet, setPlanet] = useState('');
 
   useEffect(() => {
     const apiPlanets = async () => {
@@ -20,9 +21,15 @@ function Provider({ children }) {
     apiPlanets();
   }, []);
 
+  const handleChange = ({ target: { value } }) => {
+    setPlanet(value);
+  };
+
   const context = useMemo(() => ({
     dataAPI,
-  }), [dataAPI]);
+    planet,
+    handleChange,
+  }), [dataAPI, planet]);
 
   return (
     <MyContext.Provider value={ context }>
