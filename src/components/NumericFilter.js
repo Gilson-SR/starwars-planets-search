@@ -1,4 +1,4 @@
-import React, { useContext, useState } from 'react';
+import React, { useContext, useEffect, useState } from 'react';
 import myContext from '../context/myContext';
 
 const filtering = (id, column, comparison, value) => (
@@ -26,6 +26,10 @@ function NumericFilter() {
   const [columnOptions, setColumnOptions] = useState(['population',
     'orbital_period', 'diameter', 'rotation_period', 'surface_water']);
 
+  useEffect(() => {
+    setColumnFilter(columnOptions[0] || null);
+  }, [columnOptions]);
+
   const handleColumnFilter = ({ target: { value } }) => {
     setColumnFilter(value);
   };
@@ -49,48 +53,54 @@ function NumericFilter() {
   };
 
   return (
-    <form onSubmit={ handleSubmit }>
-      <label htmlFor="column">
-        <select
-          data-testid="column-filter"
-          id="column"
-          value={ columnFilter }
-          onChange={ handleColumnFilter }
-        >
-          {
-            columnOptions.map((option) => (
-              <option key={ option } value={ option }>{option}</option>
-            ))
-          }
-        </select>
-      </label>
-      <label htmlFor="comparison">
-        <select
-          data-testid="comparison-filter"
-          id="comparison"
-          value={ comparisonFilter }
-          onChange={ handleComparisonFilter }
-        >
-          <option value="maior que">maior que</option>
-          <option value="menor que">menor que</option>
-          <option value="igual a">igual a</option>
-        </select>
-      </label>
-      <label htmlFor="numeric">
-        <input
-          data-testid="value-filter"
-          type="numeric"
-          value={ numericFilter }
-          onChange={ handleNumericFilter }
-        />
-      </label>
-      <button
-        data-testid="button-filter"
-        type="submit"
-      >
-        Filter
-      </button>
-    </form>
+    <div>
+      {columnOptions.length > 0
+      && (
+        <form onSubmit={ handleSubmit }>
+          <label htmlFor="column">
+            <select
+              data-testid="column-filter"
+              id="column"
+              value={ columnFilter }
+              onChange={ handleColumnFilter }
+            >
+              {
+                columnOptions.map((option) => (
+                  <option key={ option } value={ option }>{option}</option>
+                ))
+              }
+            </select>
+          </label>
+          <label htmlFor="comparison">
+            <select
+              data-testid="comparison-filter"
+              id="comparison"
+              value={ comparisonFilter }
+              onChange={ handleComparisonFilter }
+            >
+              <option value="maior que">maior que</option>
+              <option value="menor que">menor que</option>
+              <option value="igual a">igual a</option>
+            </select>
+          </label>
+          <label htmlFor="numeric">
+            <input
+              data-testid="value-filter"
+              type="numeric"
+              value={ numericFilter }
+              onChange={ handleNumericFilter }
+            />
+          </label>
+          <button
+            data-testid="button-filter"
+            type="submit"
+          >
+            Filter
+          </button>
+        </form>
+      )}
+    </div>
+
   );
 }
 
