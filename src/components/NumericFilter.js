@@ -23,11 +23,15 @@ function NumericFilter() {
   const [columnFilter, setColumnFilter] = useState('population');
   const [comparisonFilter, setComparisonFilter] = useState('maior que');
   const [numericFilter, setNumberFilter] = useState('0');
-  const [columnOptions, setColumnOptions] = useState(['population',
-    'orbital_period', 'diameter', 'rotation_period', 'surface_water']);
+  const {
+    addFilter,
+    columnOptions,
+    setColumnOptions,
+    id,
+  } = useContext(myContext);
 
   useEffect(() => {
-    setColumnFilter(columnOptions[0] || null);
+    setColumnFilter(columnOptions[0] || '');
   }, [columnOptions]);
 
   const handleColumnFilter = ({ target: { value } }) => {
@@ -41,10 +45,6 @@ function NumericFilter() {
   const handleNumericFilter = ({ target: { value } }) => {
     setNumberFilter(value);
   };
-  const {
-    addFilter,
-    id,
-  } = useContext(myContext);
 
   const handleSubmit = (event) => {
     event.preventDefault();
