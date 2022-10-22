@@ -2,10 +2,34 @@ import React, { useContext } from 'react';
 import myContext from '../context/myContext';
 
 function Table() {
-  const { dataAPI, planet } = useContext(myContext);
+  const {
+    dataAPI,
+    planet,
+    columnFilter,
+    numericFilter,
+    comparisonFilter,
+    activeColumnFilter,
+
+  } = useContext(myContext);
 
   const filterPlanet = (element) => element.name.toUpperCase()
     .includes(planet.toUpperCase());
+
+  const conditionalSetFilter = (element) => {
+    if (activeColumnFilter) {
+      switch (comparisonFilter) {
+      case 'maior que':
+        return Number(element[columnFilter]) > Number(numericFilter);
+      case 'menor que':
+        return Number(element[columnFilter]) < Number(numericFilter);
+      case 'igual a':
+        return Number(element[columnFilter]) === Number(numericFilter);
+      default:
+        return false;
+      }
+    }
+    return true;
+  };
 
   return (
     <table>
@@ -28,7 +52,7 @@ function Table() {
       </thead>
       <tbody>
         {
-          dataAPI?.filter(filterPlanet).map((element) => (
+          dataAPI?.filter(filterPlanet).filter(conditionalSetFilter).map((element) => (
             <tr key={ element.name }>
               <td>{ element.name }</td>
               <td>{ element.rotation_period }</td>
