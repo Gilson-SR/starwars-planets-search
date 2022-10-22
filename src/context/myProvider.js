@@ -5,10 +5,8 @@ import MyContext from './myContext';
 function Provider({ children }) {
   const [dataAPI, setDataAPI] = useState([]);
   const [planet, setPlanet] = useState('');
-  const [columnFilter, setColumnFilter] = useState('population');
-  const [numericFilter, setNumericFilter] = useState('0');
-  const [comparisonFilter, setComparisonFilter] = useState('maior que');
-  const [activeColumnFilter, setActiveColumnFilter] = useState(false);
+  const [filters, setFilters] = useState([]);
+  const [id, setID] = useState(0);
 
   useEffect(() => {
     const apiPlanets = async () => {
@@ -29,35 +27,26 @@ function Provider({ children }) {
     setPlanet(value);
   };
 
-  const handleColumnFilter = ({ target: { value } }) => {
-    setColumnFilter(value);
+  const addFilter = (filtering) => {
+    setFilters((filter) => [...filter, filtering]);
+    setID((pID) => pID + 1);
   };
-
-  const handleNumericFilter = ({ target: { value } }) => {
-    setNumericFilter(value);
-  };
-
-  const handleComparisonFilter = ({ target: { value } }) => {
-    setComparisonFilter(value);
-  };
-
-  const toggleColumnFilter = () => setActiveColumnFilter(true);
 
   const context = useMemo(
     () => ({
       dataAPI,
       planet,
       handleNameFilter,
-      columnFilter,
-      handleColumnFilter,
-      comparisonFilter,
-      handleComparisonFilter,
-      numericFilter,
-      handleNumericFilter,
-      activeColumnFilter,
-      toggleColumnFilter,
+      addFilter,
+      filters,
+      id,
     }),
-    [dataAPI, planet, columnFilter, comparisonFilter, numericFilter, activeColumnFilter],
+    [
+      dataAPI,
+      planet,
+      filters,
+      id,
+    ],
   );
 
   return (

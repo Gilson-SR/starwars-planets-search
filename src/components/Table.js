@@ -5,31 +5,15 @@ function Table() {
   const {
     dataAPI,
     planet,
-    columnFilter,
-    numericFilter,
-    comparisonFilter,
-    activeColumnFilter,
-
+    filters,
   } = useContext(myContext);
 
   const filterPlanet = (element) => element.name.toUpperCase()
     .includes(planet.toUpperCase());
 
-  const conditionalSetFilter = (element) => {
-    if (activeColumnFilter) {
-      switch (comparisonFilter) {
-      case 'maior que':
-        return Number(element[columnFilter]) > Number(numericFilter);
-      case 'menor que':
-        return Number(element[columnFilter]) < Number(numericFilter);
-      case 'igual a':
-        return Number(element[columnFilter]) === Number(numericFilter);
-      default:
-        return false;
-      }
-    }
-    return true;
-  };
+  const filteringColumn = (element) => filters
+    .map(({ f }) => f(element))
+    .every((result) => result === true);
 
   return (
     <table>
@@ -52,7 +36,7 @@ function Table() {
       </thead>
       <tbody>
         {
-          dataAPI?.filter(filterPlanet).filter(conditionalSetFilter).map((element) => (
+          dataAPI?.filter(filterPlanet).filter(filteringColumn).map((element) => (
             <tr key={ element.name }>
               <td>{ element.name }</td>
               <td>{ element.rotation_period }</td>

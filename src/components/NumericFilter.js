@@ -1,20 +1,51 @@
-import React, { useContext } from 'react';
+import React, { useContext, useState } from 'react';
 import myContext from '../context/myContext';
 
+const filtering = (id, column, comparison, value) => (
+  { id,
+    f: (element) => {
+      switch (comparison) {
+      case 'maior que':
+        return Number(element[column]) > Number(value);
+      case 'menor que':
+        return Number(element[column]) < Number(value);
+      case 'igual a':
+        return Number(element[column]) === Number(value);
+      default:
+        return false;
+      }
+    },
+    params: { column, comparison, value },
+  }
+);
+
 function NumericFilter() {
+  const [columnFilter, setColumnFilter] = useState('population');
+  const [comparisonFilter, setComparisonFilter] = useState('maior que');
+  const [numericFilter, setNumberFilter] = useState('0');
+  const [columnOptions, setColumnOptions] = useState(['population',
+    'orbital_period', 'diameter', 'rotation_period', 'surface_water']);
+
+  const handleColumnFilter = ({ target: { value } }) => {
+    setColumnFilter(value);
+  };
+
+  const handleComparisonFilter = ({ target: { value } }) => {
+    setComparisonFilter(value);
+  };
+
+  const handleNumericFilter = ({ target: { value } }) => {
+    setNumberFilter(value);
+  };
   const {
-    columnFilter,
-    handleColumnFilter,
-    numericFilter,
-    handleNumericFilter,
-    comparisonFilter,
-    handleComparisonFilter,
-    toggleColumnFilter,
+    addFilter,
+    id,
   } = useContext(myContext);
 
   const handleSubmit = (event) => {
     event.preventDefault();
-    toggleColumnFilter();
+    setColumnOptions((oldState) => oldState.filter((option) => option !== columnFilter));
+    addFilter(filtering(id, columnFilter, comparisonFilter, numericFilter));
   };
 
   return (
@@ -26,11 +57,11 @@ function NumericFilter() {
           value={ columnFilter }
           onChange={ handleColumnFilter }
         >
-          <option value="population">population</option>
-          <option value="orbital_period">orbital_period</option>
-          <option value="diameter">diameter</option>
-          <option value="rotation_period">rotation_period</option>
-          <option value="surface_water">surface_water</option>
+          {
+            columnOptions.map((option) => (
+              <option key={ option } value={ option }>{option}</option>
+            ))
+          }
         </select>
       </label>
       <label htmlFor="comparison">
