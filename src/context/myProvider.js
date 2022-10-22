@@ -9,7 +9,6 @@ function Provider({ children }) {
   const [numericFilter, setNumericFilter] = useState('0');
   const [comparisonFilter, setComparisonFilter] = useState('maior que');
   const [activeColumnFilter, setActiveColumnFilter] = useState(false);
-  
 
   useEffect(() => {
     const apiPlanets = async () => {
@@ -44,20 +43,21 @@ function Provider({ children }) {
 
   const toggleColumnFilter = () => setActiveColumnFilter(true);
 
-  const context = useMemo(() => ({
-    dataAPI,
-    planet,
-    handleNameFilter,
-    columnFilter,
-    handleColumnFilter,
-    comparisonFilter,
-    handleComparisonFilter,
-    numericFilter,
-    handleNumericFilter,
-    activeColumnFilter,
-    toggleColumnFilter,
-  }),
-  [dataAPI, planet, columnFilter, comparisonFilter, numericFilter, activeColumnFilter],
+  const context = useMemo(
+    () => ({
+      dataAPI,
+      planet,
+      handleNameFilter,
+      columnFilter,
+      handleColumnFilter,
+      comparisonFilter,
+      handleComparisonFilter,
+      numericFilter,
+      handleNumericFilter,
+      activeColumnFilter,
+      toggleColumnFilter,
+    }),
+    [dataAPI, planet, columnFilter, comparisonFilter, numericFilter, activeColumnFilter],
   );
 
   return (
